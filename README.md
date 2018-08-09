@@ -1,0 +1,2 @@
+# MyLog
+Wrapper for Monolog
