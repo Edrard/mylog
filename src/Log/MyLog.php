@@ -8,7 +8,7 @@ use Monolog\Handler\StreamHandler;
 class MyLog
 {
     protected static $log = array();
-    protected static $status = TRUE; // if True, then ON, if False, then OFF
+    protected static $status = TRUE; // if True, then ON, if False, then OFF 
     /**
     * Numeric presset type of logs 0 - info, 1 - warning, 2 - error, 3 - critical
     * 
@@ -32,6 +32,9 @@ class MyLog
             }
         }   
     }
+    public static function changeType($array_type = array('info','warning','error','critical')){
+        static::$array_type = $array_type;
+    }
     public static function changeStatus($status = TRUE){
         static::$status = $status;
     }
@@ -40,7 +43,7 @@ class MyLog
     }
     public static function critical($msg,$context = array(),$ch = 'log'){
         $fun = __FUNCTION__;
-        if(static::checkChannel($ch) !== FALSE){
+        if(static::checkChannel($ch,$fun) !== FALSE){
             static::$log[$ch]->$fun($msg);          
         } 
 
@@ -50,15 +53,15 @@ class MyLog
             $arguments[1] = array();
         }        
         $ch = !isset($arguments[2]) ? 'log' : $arguments[2]; 
-        if(static::checkChannel($ch) !== FALSE){       
+        if(static::checkChannel($ch,$method) !== FALSE){       
             call_user_func_array(array(static::$log[$ch], $method), $arguments); 
         } 
     }
     public static function allTypes($method){
         return static::array_type[$method];
     }
-    protected static function checkChannel($ch){ 
-        if(static::$status === FALSE){
+    protected static function checkChannel($ch,$type){ 
+        if(static::$status === FALSE || !isset(static::$array_type[$type])){
             return FALSE;
         }
         try{
