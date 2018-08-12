@@ -8,6 +8,7 @@ use Monolog\Handler\StreamHandler;
 class MyLog
 {
     protected static $log = array();
+    protected static $status = TRUE; // if True, then ON, if False, then OFF
     /**
     * Numeric presset type of logs 0 - info, 1 - warning, 2 - error, 3 - critical
     * 
@@ -31,6 +32,12 @@ class MyLog
             }
         }   
     }
+    public static function changeStatus($status = TRUE){
+        static::$status = $status;
+    }
+    public static function status(){
+        return static::$status;
+    }
     public static function critical($msg,$context = array(),$ch = 'log'){
         $fun = __FUNCTION__;
         if(static::checkChannel($ch) !== FALSE){
@@ -50,7 +57,10 @@ class MyLog
     public static function allTypes($method){
         return static::array_type[$method];
     }
-    protected static function checkChannel($ch){
+    protected static function checkChannel($ch){ 
+        if(static::$status === FALSE){
+            return FALSE;
+        }
         try{
             if(!isset(static::$log[$ch])){
                 throw new \Exception('No channel '.$ch.' in MyLog!!!');
