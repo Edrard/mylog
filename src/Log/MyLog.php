@@ -61,7 +61,7 @@ class MyLog
         return static::array_type[$method];
     }
     protected static function checkChannel($ch,$type){ 
-        if(static::$status === FALSE || !isset(static::$array_type[$type])){
+        if(static::$status === FALSE || !in_array($type,static::$array_type)){
             return FALSE;
         }
         try{
