@@ -63,12 +63,12 @@ class MyLog
         return static::array_type[$method];
     }
     protected static function checkChannel($ch,$type){ 
-        if(static::$status === FALSE || !in_array($type,static::$array_type[$ch])){
-            return FALSE;
-        }
         try{
-            if(!isset(static::$log[$ch])){
+            if(!isset(static::$log[$ch]) || !isset(static::$array_type[$ch])){
                 throw new \Exception('No channel '.$ch.' in MyLog!!!');
+            }
+            if(static::$status === FALSE || !in_array($type,static::$array_type[$ch])){
+                return FALSE;
             }
         }catch(\Exception $e){
             $msg = $e->getMessage()."\n".$e->getTraceAsString()."\n";
