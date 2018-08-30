@@ -14,11 +14,13 @@ class MyLog
     * 
     * @var mixed
     */
-    protected static $array_type = array('info','warning','error','critical');
+    protected static $array_type_base = array('info','warning','error','critical');
+    protected static $array_type = array();
 
     public static function init($path = 'logs',$ch = 'log', array $handlers = array(),$re_enable = FALSE){
         if(!isset(static::$log[$ch]) || $re_enable !== FALSE){
             static::$log[$ch] = new Logger($ch);
+            static::$array_type[$ch] = static::$array_type_base;
             if($re_enable === FALSE){ 
                 static::$log[$ch]->pushHandler(new StreamHandler($path.'/info.log', Logger::INFO, false));
                 static::$log[$ch]->pushHandler(new StreamHandler($path.'/error.log', Logger::WARNING, false));
@@ -32,8 +34,8 @@ class MyLog
             }
         }   
     }
-    public static function changeType($array_type = array('info','warning','error','critical')){
-        static::$array_type = $array_type;
+    public static function changeType($array_type = array('info','warning','error','critical'),$ch = 'log'){
+        static::$array_type[$ch] = $array_type;
     }
     public static function changeStatus($status = TRUE){
         static::$status = $status;
@@ -61,7 +63,7 @@ class MyLog
         return static::array_type[$method];
     }
     protected static function checkChannel($ch,$type){ 
-        if(static::$status === FALSE || !in_array($type,static::$array_type)){
+        if(static::$status === FALSE || !in_array($type,static::$array_type[$ch])){
             return FALSE;
         }
         try{
