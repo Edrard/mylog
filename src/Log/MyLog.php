@@ -69,6 +69,9 @@ class MyLog
     protected static function checkChannel($ch,$type){ 
         try{
             if(!isset(static::$log[$ch]) || !isset(static::$array_type[$ch])){
+                if($ch == 'log'){
+                    return FALSE;
+                }
                 throw new \Exception('No channel '.$ch.' in MyLog!!!');
             }
             if(static::$status === FALSE || !in_array($type,static::$array_type[$ch])){
