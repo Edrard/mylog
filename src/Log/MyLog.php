@@ -22,6 +22,7 @@ class MyLog
             static::$log[$ch] = new Logger($ch);
             static::$array_type[$ch] = static::$array_type_base;
             if($re_enable === FALSE){ 
+                static::$log[$ch]->pushHandler(new StreamHandler($path.'/debug.log', Logger::DEBUG, false));
                 static::$log[$ch]->pushHandler(new StreamHandler($path.'/info.log', Logger::INFO, false));
                 static::$log[$ch]->pushHandler(new StreamHandler($path.'/error.log', Logger::WARNING, false));
                 static::$log[$ch]->pushHandler(new StreamHandler($path.'/error.log', Logger::ERROR, false));
@@ -55,6 +56,9 @@ class MyLog
             $arguments[1] = array();
         }        
         $ch = !isset($arguments[2]) ? 'log' : $arguments[2]; 
+        if($ch == 'log' && static::checkChannel($ch,$method) === FALSE){
+            static::init();    
+        }
         if(static::checkChannel($ch,$method) !== FALSE){       
             call_user_func_array(array(static::$log[$ch], $method), $arguments); 
         } 
