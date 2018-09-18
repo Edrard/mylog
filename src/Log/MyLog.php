@@ -17,16 +17,17 @@ class MyLog
     protected static $array_type_base = array('info','warning','error','critical');
     protected static $array_type = array();
 
-    public static function init($path = 'logs',$ch = 'log', array $handlers = array(),$re_enable = FALSE){
+    public static function init($path = 'logs',$ch = 'log', array $handlers = array(),$re_enable = FALSE, $date_in = TRUE){
         if(!isset(static::$log[$ch]) || $re_enable !== FALSE){
             static::$log[$ch] = new Logger($ch);
             static::$array_type[$ch] = static::$array_type_base;
             if($re_enable === FALSE){ 
-                static::$log[$ch]->pushHandler(new StreamHandler($path.'/debug.log', Logger::DEBUG, false));
-                static::$log[$ch]->pushHandler(new StreamHandler($path.'/info.log', Logger::INFO, false));
-                static::$log[$ch]->pushHandler(new StreamHandler($path.'/error.log', Logger::WARNING, false));
-                static::$log[$ch]->pushHandler(new StreamHandler($path.'/error.log', Logger::ERROR, false));
-                static::$log[$ch]->pushHandler(new StreamHandler($path.'/error.log', Logger::CRITICAL, false));  
+                $add = $date_in !== FALSE ? '-'.date("Y-m-d") : '';
+                static::$log[$ch]->pushHandler(new StreamHandler($path.'/debug'.$add.'.log', Logger::DEBUG, false));
+                static::$log[$ch]->pushHandler(new StreamHandler($path.'/info'.$add.'.log', Logger::INFO, false));
+                static::$log[$ch]->pushHandler(new StreamHandler($path.'/error'.$add.'.log', Logger::WARNING, false));
+                static::$log[$ch]->pushHandler(new StreamHandler($path.'/error'.$add.'.log', Logger::ERROR, false));
+                static::$log[$ch]->pushHandler(new StreamHandler($path.'/error'.$add.'.log', Logger::CRITICAL, false));  
             }
             foreach($handlers as $handel){
                 if($handel instanceof StreamHandler){
