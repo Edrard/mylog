@@ -1,4 +1,4 @@
-# Curl
+# My Log
 My Log, extend of Monolog to run static
 
 Simple Example
