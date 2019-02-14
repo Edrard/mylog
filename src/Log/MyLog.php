@@ -47,21 +47,26 @@ class MyLog
     }
     public static function critical($msg,$context = array(),$ch = 'log'){
         $fun = __FUNCTION__;
-        if(static::checkChannel($ch,$fun) !== FALSE){
-            static::$log[$ch]->$fun($msg);          
-        } 
-
+        !is_array($ch) ? $chs[] = $ch : $chs = $ch;
+        foreach($chs as $ch){
+            if(static::checkChannel($ch,$fun) !== FALSE){
+                static::$log[$ch]->$fun($msg);          
+            } 
+        }
     }
     public static function __callStatic($method,$arguments) {
         if(!isset($arguments[1]) || !is_array($arguments[1])){
             $arguments[1] = array();
         }        
         $ch = !isset($arguments[2]) ? 'log' : $arguments[2]; 
-        if($ch == 'log' && static::checkChannel($ch,$method) === FALSE){
-            static::init();    
-        }
-        if(static::checkChannel($ch,$method) !== FALSE){       
-            call_user_func_array(array(static::$log[$ch], $method), $arguments); 
+        !is_array($ch) ? $chs[] = $ch : $chs = $ch;
+        foreach($chs as $ch){
+            if($ch == 'log' && static::checkChannel($ch,$method) === FALSE){
+                static::init();    
+            }
+            if(static::checkChannel($ch,$method) !== FALSE){       
+                call_user_func_array(array(static::$log[$ch], $method), $arguments); 
+            }
         } 
     }
     public static function allTypes($method){
