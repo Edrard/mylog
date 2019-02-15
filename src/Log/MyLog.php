@@ -4,6 +4,7 @@ namespace edrard\Log;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Monolog\Handler\HandlerInterface;
 
 class MyLog
 {
@@ -30,7 +31,7 @@ class MyLog
                 static::$log[$ch]->pushHandler(new StreamHandler($path.'/error'.$add.'.log', Logger::CRITICAL, false));  
             }
             foreach($handlers as $handel){
-                if($handel instanceof StreamHandler){
+                if($handel instanceof HandlerInterface){
                     static::$log[$ch]->pushHandler($handel);    
                 }
             }
