@@ -72,6 +72,9 @@ class MyLog
     public static function allTypes($method){
         return static::array_type[$method];
     }
+    public static function customCommand($ch,$command,$arguments = array()){
+        call_user_func_array(array(static::$log[$ch], $command), $arguments);
+    }
     protected static function checkChannel($ch,$type){ 
         try{
             if(!isset(static::$log[$ch]) || !isset(static::$array_type[$ch])){
