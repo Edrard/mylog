@@ -9,7 +9,7 @@
         "email": "demonand@gmail.com"
     }],
     "require": {
-        "php": ">=5.4",
+        "php": ">=5.6",
         "monolog/monolog": "^1.23"
     },
     "autoload": {
