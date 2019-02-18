@@ -16,7 +16,7 @@ class MyLog
     * @var mixed
     */
     protected static $array_type_base = array('info','warning','error','critical');
-    protected static $file_types_base = array('debug' => 'debug.log','info' => 'info.log','error' => 'error','warning' => 'error.log','critical' => 'error.log');
+    protected static $file_types_base = array('debug' => 'debug.log','info' => 'info.log','warning' => 'error.log','error' => 'error.log','critical' => 'error.log');
     protected static $config = array();
 
     public static function init($path = 'logs',$ch = 'log', array $handlers = array(),$re_enable = FALSE, $maxfiles = 60){
