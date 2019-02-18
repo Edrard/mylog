@@ -31,7 +31,8 @@ class MyLog
                 static::$log[$ch]->pushHandler(new RotatingFileHandler ($path.'/'.static::$file_types_base['critical'], $maxfiles, Logger::CRITICAL, false));  
                 static::$config[$ch]['types'] = static::$file_types_base;
                 static::$config[$ch]['path'] = $path;
-                static::$config[$ch]['maxfiles'] = $maxfiles;
+                static::$config[$ch]['maxfiles'] = $maxfiles; 
+                static::$config[$ch]['date'] = date('Y-m-d');
             }
             foreach($handlers as $handler){
                 if($handel instanceof HandlerInterface){
