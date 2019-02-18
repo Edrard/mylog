@@ -16,28 +16,39 @@ class MyLog
     * @var mixed
     */
     protected static $array_type_base = array('info','warning','error','critical');
-    protected static $array_type = array();
+    protected static $file_types_base = array('debug' => 'debug.log','info' => 'info.log','error' => 'error','warning' => 'error.log','critical' => 'error.log');
+    protected static $config = array();
 
     public static function init($path = 'logs',$ch = 'log', array $handlers = array(),$re_enable = FALSE, $maxfiles = 60){
         if(!isset(static::$log[$ch]) || $re_enable !== FALSE){
             static::$log[$ch] = new Logger($ch);
-            static::$array_type[$ch] = static::$array_type_base;
+            static::$config[$ch]['type'] = static::$array_type_base;
             if($re_enable === FALSE){ 
-                static::$log[$ch]->pushHandler(new RotatingFileHandler ($path.'/debug.log', $maxfiles, Logger::DEBUG, false));
-                static::$log[$ch]->pushHandler(new RotatingFileHandler ($path.'/info.log', $maxfiles, Logger::INFO, false));
-                static::$log[$ch]->pushHandler(new RotatingFileHandler ($path.'/error.log', $maxfiles, Logger::WARNING, false));
-                static::$log[$ch]->pushHandler(new RotatingFileHandler ($path.'/error.log', $maxfiles, Logger::ERROR, false));
-                static::$log[$ch]->pushHandler(new RotatingFileHandler ($path.'/error.log', $maxfiles, Logger::CRITICAL, false));  
+                static::$log[$ch]->pushHandler(new RotatingFileHandler ($path.'/'.static::$file_types_base['debug'], $maxfiles, Logger::DEBUG, false));
+                static::$log[$ch]->pushHandler(new RotatingFileHandler ($path.'/'.static::$file_types_base['info'], $maxfiles, Logger::INFO, false));
+                static::$log[$ch]->pushHandler(new RotatingFileHandler ($path.'/'.static::$file_types_base['warning'], $maxfiles, Logger::WARNING, false));
+                static::$log[$ch]->pushHandler(new RotatingFileHandler ($path.'/'.static::$file_types_base['error'], $maxfiles, Logger::ERROR, false));
+                static::$log[$ch]->pushHandler(new RotatingFileHandler ($path.'/'.static::$file_types_base['critical'], $maxfiles, Logger::CRITICAL, false));  
+                static::$config[$ch]['types'] = static::$file_types_base;
+                static::$config[$ch]['path'] = $path;
+                static::$config[$ch]['maxfiles'] = $maxfiles;
             }
-            foreach($handlers as $handel){
+            foreach($handlers as $handler){
                 if($handel instanceof HandlerInterface){
-                    static::$log[$ch]->pushHandler($handel);    
+                    static::$log[$ch]->pushHandler($handler);  
+                    static::$config[$ch]['handler'][] = $handler;  
                 }
             }
         }   
     }
+    public static function getLogConfig($id){
+        return static::$config[$id];
+    }
+    public static function changeLogFilesBase(array $file_types){
+        static::$file_types_base = $file_types;   
+    } 
     public static function changeType($array_type = array('info','warning','error','critical'),$ch = 'log'){
-        static::$array_type[$ch] = $array_type;
+        static::$config[$ch]['type'] = $array_type;
     }
     public static function changeStatus($status = TRUE){
         static::$status = $status;
@@ -69,21 +80,18 @@ class MyLog
             }
         } 
     }
-    public static function allTypes($method){
-        return static::array_type[$method];
-    }
     public static function customCommand($ch,$command,$arguments = array()){ 
         return call_user_func_array(array(static::$log[$ch], $command), $arguments);
     }
     protected static function checkChannel($ch,$type){ 
         try{
-            if(!isset(static::$log[$ch]) || !isset(static::$array_type[$ch])){
+            if(!isset(static::$log[$ch]) || !isset(static::$config[$ch]['type'])){
                 if($ch == 'log'){
                     return FALSE;
                 }
                 throw new \Exception('No channel '.$ch.' in MyLog!!!');
             }
-            if(static::$status === FALSE || !in_array($type,static::$array_type[$ch])){
+            if(static::$status === FALSE || !in_array($type,static::$config[$ch]['type'])){
                 return FALSE;
             }
         }catch(\Exception $e){
