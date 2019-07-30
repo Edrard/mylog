@@ -16,6 +16,5 @@
         "psr-4": {
             "edrard\\Log\\": "src/Log"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }
