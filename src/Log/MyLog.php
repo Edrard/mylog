@@ -5,6 +5,7 @@ namespace edrard\Log;
 use Monolog\Logger;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\HandlerInterface;
+use edrard\Log\Timer;
 
 class MyLog
 {
@@ -18,13 +19,10 @@ class MyLog
     protected static $array_type_base = array('info','warning','error','critical');
     protected static $file_types_base = array('debug' => 'debug.log','info' => 'info.log','warning' => 'error.log','error' => 'error.log','critical' => 'error.log');
     protected static $config = array();
-    protected static $time_start = [];
-    protected static $time_end = [];
-    protected static $execution_time = [];
 
     public static function init($path = 'logs', $ch = 'log', array $handlers = array(), $re_enable = false, $maxfiles = 60)
     {
-        static::startTime();
+        Timer::startTime();
         if (!isset(static::$log[$ch]) || $re_enable !== false) {
             static::$log[$ch] = new Logger($ch);
             static::$config[$ch]['type'] = static::$array_type_base;
@@ -120,22 +118,5 @@ class MyLog
             return false;
         }
         return true;
-    }
-    /**
-    * put your comment there...
-    *
-    */
-    public static function startTime($type = 'global')
-    {
-        static::$time_start[$type] = microtime(true);
-    }
-    /**
-    * put your comment there...
-    *
-    */
-    public static function endTime($type = 'global')
-    {
-        static::$time_end[$type] = microtime(true);
-        static::$execution_time[$type] = static::$time_end[$type] - static::$time_start[$type];
     }
 }
