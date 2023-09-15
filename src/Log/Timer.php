@@ -12,7 +12,7 @@ class Timer
     {
         static::$time_start[$type] = microtime(true);
     }
-    public static function endTime($type = 'global', $round = 1)
+    public static function endTime($type = 'global', $round = 2)
     {
         static::$time_end[$type] = microtime(true);
         static::$execution_time[$type] = static::$time_end[$type] - static::$time_start[$type];
@@ -21,7 +21,7 @@ class Timer
             static::$execution_time[$type] = round(static::$execution_time[$type] * $koeff)/$koeff;
         }
     }
-    public static function getTime($type = 'global', $round = 1)
+    public static function getTime($type = 'global', $round = 2)
     {
        if(!isset(static::$execution_time[$type]) ||  !static::$execution_time[$type]){
             static::endTime($type,$round);
