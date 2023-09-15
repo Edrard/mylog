@@ -20,7 +20,7 @@ class Timer
     public static function getTime($type = 'global')
     {
        if(!isset(static::$execution_time[$type]) ||  !static::$execution_time[$type]){
-            static::endTime();
+            static::endTime($type);
         }
         return isset(static::$execution_time[$type]) ? static::$execution_time[$type] : "" ;
     }
