@@ -19,6 +19,9 @@ class Timer
     }
     public static function getTime($type = 'global')
     {
-        return static::$time_end[$type];
+       if(!isset(static::$execution_time[$type]) ||  !static::$execution_time[$type]){
+            static::endTime();
+        }
+        return isset(static::$execution_time[$type]) ? static::$execution_time[$type] : "" ;
     }
 }
