@@ -11,10 +11,10 @@ class Timer
     public static function startTime($type = 'global')
     {
         static::$time_start[$type] = microtime(true);
-        if(isset(static::$execution_time[$type]) || static::$execution_time[$type]){
+        if(isset(static::$execution_time[$type])){
             unset(static::$execution_time[$type]);
         }
-        if(isset(static::$time_end[$type]) || static::$time_end[$type]){
+        if(isset(static::$time_end[$type])){
             unset(static::$time_end[$type]);
         }
     }
