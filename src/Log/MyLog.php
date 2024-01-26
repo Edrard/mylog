@@ -22,8 +22,8 @@ class MyLog
 
     public static function init($path = 'logs', $ch = 'log', array $handlers = array(), $re_enable = false, $maxfiles = 60)
     {
-        Timer::startTime();
         if (!isset(static::$log[$ch]) || $re_enable !== false) {
+            Timer::startTime();
             static::$log[$ch] = new Logger($ch);
             static::$config[$ch]['type'] = static::$array_type_base;
             if ($re_enable === false) {
