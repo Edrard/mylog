@@ -20,7 +20,7 @@ class MyLog
     protected static $file_types_base = array('debug' => 'debug.log','info' => 'info.log','warning' => 'error.log','error' => 'error.log','critical' => 'error.log');
     protected static $config = array();
 
-    public static function init($path = 'logs', $ch = 'log', array $handlers = array(), $re_enable = false, $maxfiles = 60, $prefix_date = 'Y-m-d')
+    public static function init($path = 'logs', $ch = 'log', array $handlers = array(), $re_enable = false, $maxfiles = 60)
     {
         if (!isset(static::$log[$ch]) || $re_enable !== false) {
             Timer::startTime();
@@ -35,7 +35,7 @@ class MyLog
                 static::$config[$ch]['types'] = static::$file_types_base;
                 static::$config[$ch]['path'] = $path;
                 static::$config[$ch]['maxfiles'] = $maxfiles;
-                static::$config[$ch]['date'] = date($prefix_date);
+                static::$config[$ch]['date'] = date('Y-m-d');
             }
             foreach ($handlers as $handler) {
                 if ($handel instanceof HandlerInterface) {
