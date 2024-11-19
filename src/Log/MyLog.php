@@ -38,7 +38,7 @@ class MyLog
                 static::$config[$ch]['date'] = date('Y-m-d');
             }
             foreach ($handlers as $handler) {
-                if ($handel instanceof HandlerInterface) {
+                if ($handler instanceof HandlerInterface) {
                     static::$log[$ch]->pushHandler($handler);
                     static::$config[$ch]['handler'][] = $handler;
                 }
