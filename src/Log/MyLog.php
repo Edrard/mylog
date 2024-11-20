@@ -71,7 +71,7 @@ class MyLog
         !is_array($ch) ? $chs[] = $ch : $chs = $ch;
         foreach ($chs as $ch) {
             if (static::checkChannel($ch, $fun) !== false) {
-                static::$log[$ch]->$fun($msg);
+                static::$log[$ch]->$fun($msg,$context);
             }
         }
     }
