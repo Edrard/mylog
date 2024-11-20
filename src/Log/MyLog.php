@@ -45,6 +45,15 @@ class MyLog
             }
         }
     }
+    public static function setNewHandlers(array $handlers){
+        static::$log[$ch]->close();
+        foreach ($handlers as $handler) {
+            if ($handler instanceof HandlerInterface) {
+                static::$log[$ch]->pushHandler($handler);
+                static::$config[$ch]['handler'][] = $handler;
+            }
+        }
+    }
     public static function getLogConfig($id)
     {
         return static::$config[$id];
