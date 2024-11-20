@@ -45,7 +45,7 @@ class MyLog
             }
         }
     }
-    public static function setNewHandlers(array $handlers){
+    public static function setNewHandlers(array $handlers,$ch){
         static::$log[$ch]->close();
         foreach ($handlers as $handler) {
             if ($handler instanceof HandlerInterface) {
