@@ -104,6 +104,10 @@ class MyLog
     {
         return call_user_func_array(array(static::$log[$ch], $command), $arguments);
     }
+    public static function isInitialized($ch = 'log'): bool
+    {
+        return isset(static::$log[$ch]) && static::$log[$ch] instanceof Logger;
+    }
     protected static function checkChannel($ch, $type)
     {
         try {
