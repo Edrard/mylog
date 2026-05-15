@@ -6,6 +6,7 @@ use Monolog\Logger;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\HandlerInterface;
 use edrard\Log\Timer;
+use edrard\Log\Exceptions\MyLogException;
 
 class MyLog
 {
@@ -126,7 +127,7 @@ class MyLog
                 $ch = key(static::$log);
                 static::critical($msg, array(), $ch);
             } else {
-                die($msg);
+                throw new MyLogException($msg, 0, $e);
             }
             return false;
         }
